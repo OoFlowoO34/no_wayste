@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HomeProduct index{% endblock %}
+
+{% block body %}
+    <h1>HomeProduct index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Hp_scan_date</th>
+                <th>Hp_use_by_date</th>
+                <th>Hp_consumed</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for home_product in home_products %}
+            <tr>
+                <td>{{ home_product.id }}</td>
+                <td>{{ home_product.hpScanDate ? home_product.hpScanDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ home_product.hpUseByDate ? home_product.hpUseByDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ home_product.hpConsumed ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_home_product_show', {'id': home_product.id}) }}">show</a>
+                    <a href="{{ path('app_home_product_edit', {'id': home_product.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_home_product_new') }}">Create new</a>
+{% endblock %}

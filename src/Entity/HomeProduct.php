@@ -14,10 +14,10 @@ class HomeProduct
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $hp_scan_date = null;
+    private ?\DateTime $hp_scan_date = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $hp_use_by_date = null;
+    private ?\DateTime $hp_use_by_date = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $hp_consumed = null;
@@ -28,31 +28,40 @@ class HomeProduct
 
     #[ORM\ManyToOne(inversedBy: 'homeProducts')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?home $home = null;
+    private ?Home $home = null;
+
+
+    /**
+     * Constructor
+     */
+    // public function __construct()
+    // {
+    //     $this->hp_scan_date = new \DateTimeImmutable();
+    // }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getHpScanDate(): ?\DateTimeImmutable
+    public function getHpScanDate(): ?\DateTime
     {
         return $this->hp_scan_date;
     }
 
-    public function setHpScanDate(\DateTimeImmutable $hp_scan_date): self
+    public function setHpScanDate(\DateTime $hp_scan_date): self
     {
         $this->hp_scan_date = $hp_scan_date;
 
         return $this;
     }
 
-    public function getHpUseByDate(): ?\DateTimeImmutable
+    public function getHpUseByDate(): ?\DateTime
     {
         return $this->hp_use_by_date;
     }
 
-    public function setHpUseByDate(?\DateTimeImmutable $hp_use_by_date): self
+    public function setHpUseByDate(?\DateTime $hp_use_by_date): self
     {
         $this->hp_use_by_date = $hp_use_by_date;
 
@@ -83,12 +92,12 @@ class HomeProduct
         return $this;
     }
 
-    public function getHome(): ?home
+    public function getHome(): ?Home
     {
         return $this->home;
     }
 
-    public function setHome(?home $home): self
+    public function setHome(?Home $home): self
     {
         $this->home = $home;
 

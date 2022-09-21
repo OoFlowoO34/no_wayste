@@ -30,6 +30,9 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: HomeProduct::class, orphanRemoval: true)]
     private Collection $homeProducts;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->favorites = new ArrayCollection();
@@ -135,5 +138,33 @@ class Product
         }
 
         return $this;
+    }
+
+    public function isFavByUser(User $user): bool {
+    $favorites = $this->getFavorites();
+
+        if($favorites != null ){
+
+            foreach($favorites as $favorite){
+                if($favorite->getUser() == $user){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function deleteFavByUser(User $user): bool {
+    $favorites = $this->getFavorites();
+
+        if($favorites != null ){
+
+            foreach($favorites as $favorite){
+                if($favorite->getUser() == $user){
+                    removeFavorite($favorite);
+                }
+            }
+        }
+        return false;
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Entity;
-
-use App\Repository\FavoriteRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\FavoriteRepository;
 
 #[ORM\Entity(repositoryClass: FavoriteRepository::class)]
 class Favorite
@@ -14,7 +14,7 @@ class Favorite
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $f_addition_date = null;
+    private ?\DateTime $f_addition_date = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $f_order_number = null;
@@ -23,17 +23,22 @@ class Favorite
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
+    // public function __construct()
+    // {
+    //     $this->f_addition_date = new \DateTimeImmutable();
+    // }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFAdditionDate(): ?\DateTimeImmutable
+    public function getFAdditionDate(): ?\DateTime
     {
         return $this->f_addition_date;
     }
 
-    public function setFAdditionDate(?\DateTimeImmutable $f_addition_date): self
+    public function setFAdditionDate(?\DateTime $f_addition_date): self
     {
         $this->f_addition_date = $f_addition_date;
 

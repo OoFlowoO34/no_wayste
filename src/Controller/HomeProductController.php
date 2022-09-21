@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/home/product')]
+#[Route('/home_product')]
 class HomeProductController extends AbstractController
 {
     #[Route('/', name: 'app_home_product_index', methods: ['GET'])]

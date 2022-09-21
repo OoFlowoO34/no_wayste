@@ -2,24 +2,85 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
+use App\Entity\Home;
+use Faker\Generator;
 use App\Entity\Product;
+use App\Entity\Favorite;
+use App\Entity\HomeProduct;
+use App\DataFixtures\AppFixtures;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class AppFixtures extends Fixture
 {
+    /**
+     * @var Generator
+     */
+    private Generator $faker;
+
+    public function __construct()
+    {
+        $this->faker = Factory::create('fr_FR');
+    }
+    
+
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
-        for ($i = 0; $i < 20; $i++) {
-                    $product = new Product();
-                    $product->setPBarCode(mt_rand(10000000, 99999999));
-                    $product->setPName('product '.$i);
-                    $product->setPBrand('brand '.$i);
-                    $manager->persist($product);
-                }
+
+
+
+        // Product
+        $products = [];
+        for ($j = 0; $j < 100; $j++) {
+            $rand = mt_rand(1, 3);
+            $product = new Product();
+            $product->setPBarCode($this->faker->ean13());
+            $product->setPName($this->faker->words($rand, true));
+            $product->setPBrand($this->faker->word());
+            $products[] = $product;
+
+            $manager->persist($product);
+            }
+
+        // Favorite
+        $favorites = [];
+        for ($i = 0; $i < 100; $i++) {
+            $favorite = new Favorite();
+            $favorite->setFAdditionDate($this->faker->dateTimeThisMonth());
+            $favorite->setFOrderNumber(mt_rand(0, 100));
+            $favorite->setProduct($products[mt_rand(0, count($products) - 1 )]);
+            $favorites[] = $favorite;
+
+            $manager->persist($favorite);
+            }
+
+        // Home
+        $homes = [];
+        for ($k = 0; $k < 10; $k++) {
+            $home = new Home();
+            $home->setHName($this->faker->name());
+            $home->setHKey((mt_rand(0, 99999)));
+            $home->setHPassword($this->faker->password());
+            $homes[] = $home;
+
+            $manager->persist($home);
+            }
+
+        // HomeProduct
+        for ($l = 0; $l < 50; $l++) {
+            $homeproduct = new HomeProduct();
+            $homeproduct->setHpScanDate($this->faker->dateTimeThisMonth());
+            $homeproduct->setHpUseByDate($this->faker->dateTimeThisMonth());
+            $homeproduct->setHpConsumed($this->faker->boolean());
+            $homeproduct->setProduct($products[mt_rand(0, count($products) - 1 )]);
+            $homeproduct->setHome($homes[mt_rand(0, count($homes) - 1 )]);
+        
+            $manager->persist($homeproduct);
+        }
                 
         $manager->flush();
     }
+
+    
 }

@@ -75,4 +75,15 @@ class FavoriteController extends AbstractController
 
         return $this->redirectToRoute('app_favorite_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}', name: 'app_favorite_delete_2', methods: ['GET'])]
+    public function delete_2(Request $request, Favorite $favorite, FavoriteRepository $favoriteRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$favorite->getId(), $request->request->get('_token'))) {
+            $favoriteRepository->remove($favorite, true);
+        }
+
+        return $this->redirectToRoute('app_favorite_index', [], Response::HTTP_SEE_OTHER);
+    }
+
 }

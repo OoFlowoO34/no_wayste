@@ -21,7 +21,7 @@
                 <td>{{ home_product.getProduct().getPName() }}</td>
                 <td>    
                         {% if home_product.getProduct().isFavByUser(app.user) %} 
-                            <a href="{{ path('app_favorite_delete', {'id': home_product.getProduct.}) }}"><i class="fa-solid fa-star"></i></a>
+                            <a href="{{ path('app_favorite_delete', {'id': home_product.product}) }}"><i class="fa-solid fa-star"></i></a>
                         {% else %}
                             <a href=""><i class="fa-regular fa-star"></a>
                         {% endif %}

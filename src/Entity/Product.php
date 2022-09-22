@@ -154,17 +154,17 @@ class Product
         return false;
     }
 
-    public function deleteFavByUser(User $user): bool {
-    $favorites = $this->getFavorites();
+    // public function deleteFavByUser(User $user): bool {
+    // $favorites = $this->getFavorites();
 
-        if($favorites != null ){
+    //     if($favorites != null ){
 
-            foreach($favorites as $favorite){
-                if($favorite->getUser() == $user){
-                    removeFavorite($favorite);
-                }
-            }
-        }
-        return false;
-    }
+    //         foreach($favorites as $favorite){
+    //             if($favorite->getUser() == $user){
+    //                 $this->removeFavorite($favorite);
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // }
 }

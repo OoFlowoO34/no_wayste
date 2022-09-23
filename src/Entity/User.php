@@ -2,13 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use DateTime;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -29,7 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $u_name = null;
+    private ?string $u_name = null ;
 
     #[ORM\Column(length: 7)]
     private ?string $u_color = null;
@@ -38,7 +44,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $u_active_notification = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTimeInterface $u_hour_notification = null;
+    private ?DateTimeInterface $u_hour_notification = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Favorite::class, orphanRemoval: true)]
+    private Collection $favorites;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?home $home = null;
+
+
+
+        /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->u_hour_notification = new DateTime("18:30:00");
+        $this->u_active_notification = true;
+        $this->u_color = "green";
+        $this->u_name = "user";
+        $this->favorites = new ArrayCollection();
+       
+    }
 
     public function getId(): ?int
     {
@@ -154,6 +182,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUHourNotification(\DateTimeInterface $u_hour_notification): self
     {
         $this->u_hour_notification = $u_hour_notification;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favorite>
+     */
+    public function getFavorites(): Collection
+    {
+        return $this->favorites;
+    }
+
+    public function addFavorite(Favorite $favorite): self
+    {
+        if (!$this->favorites->contains($favorite)) {
+            $this->favorites->add($favorite);
+            $favorite->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorite(Favorite $favorite): self
+    {
+        if ($this->favorites->removeElement($favorite)) {
+            // set the owning side to null (unless already changed)
+            if ($favorite->getUser() === $this) {
+                $favorite->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getHome(): ?home
+    {
+        return $this->home;
+    }
+
+    public function setHome(?home $home): self
+    {
+        $this->home = $home;
 
         return $this;
     }

@@ -27,9 +27,13 @@ class Home
     #[ORM\OneToMany(mappedBy: 'home', targetEntity: HomeProduct::class, orphanRemoval: true)]
     private Collection $homeProducts;
 
+    #[ORM\OneToMany(mappedBy: 'home', targetEntity: User::class, orphanRemoval: true)]
+    private Collection $users;
+
     public function __construct()
     {
         $this->homeProducts = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,6 +101,36 @@ class Home
             // set the owning side to null (unless already changed)
             if ($homeProduct->getHome() === $this) {
                 $homeProduct->setHome(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setHome($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getHome() === $this) {
+                $user->setHome(null);
             }
         }
 

@@ -3,12 +3,13 @@
 {% block title %}HomeProduct index{% endblock %}
 
 {% block body %}
-    <h1>HomeProduct index</h1>
+    <h1>HomeProduct index - {{ app.user.getUName() }}</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>name</th>
+                <th>fav</th>
                 <th>Hp_scan_date</th>
                 <th>Hp_use_by_date</th>
                 <th>Hp_consumed</th>
@@ -20,10 +21,11 @@
             <tr>
                 <td>{{ home_product.getProduct().getPName() }}</td>
                 <td>    
+                
                         {% if home_product.getProduct().isFavByUser(app.user) %} 
                             <a href="{{ path('app_favorite_delete', {'id': home_product.product}) }}"><i class="fa-solid fa-star"></i></a>
                         {% else %}
-                            <a href=""><i class="fa-regular fa-star"></a>
+                            <a href="{{ path('app_favorite_new', {'id': home_product.product}) }}"><i class="fa-regular fa-star"></i></a>
                         {% endif %}
                 </td>
                 <td>{{ home_product.hpScanDate ? home_product.hpScanDate|date('Y-m-d H:i:s') : '' }}</td>

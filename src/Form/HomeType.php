@@ -13,8 +13,8 @@ class HomeType extends AbstractType
     {
         $builder
             ->add('h_name')
-            // ->add('h_key')
-            // ->add('h_password')
+            ->add('h_key')
+            ->add('h_password')
         ;
     }
 

@@ -49,7 +49,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Favorite::class, orphanRemoval: true)]
     private Collection $favorites;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\ManyToOne(inversedBy: 'users', cascade:["persist"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?home $home = null;
 
@@ -60,10 +60,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function __construct()
     {
+   
         $this->u_hour_notification = new DateTime("18:30:00");
+        
         $this->u_active_notification = true;
         $this->u_color = "green";
         $this->u_name = "user";
+       // $this->home = new home;
         $this->favorites = new ArrayCollection();
        
     }

@@ -27,7 +27,7 @@ class Home
     #[ORM\OneToMany(mappedBy: 'home', targetEntity: HomeProduct::class, orphanRemoval: true)]
     private Collection $homeProducts;
 
-    #[ORM\OneToMany(mappedBy: 'home', targetEntity: User::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'home', targetEntity: User::class, orphanRemoval: true, )]
     private Collection $users;
 
     public function __construct()

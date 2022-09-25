@@ -6,6 +6,7 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\Home;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use DateTime;
@@ -51,7 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToOne(inversedBy: 'users', cascade:["persist"])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?home $home = null;
+    private ?Home $home = null;
 
 
 
@@ -219,12 +220,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getHome(): ?home
+    public function getHome(): ?Home
     {
         return $this->home;
     }
 
-    public function setHome(?home $home): self
+    public function setHome(?Home $home): self
     {
         $this->home = $home;
 

@@ -2,23 +2,27 @@
 
 namespace App\DataFixtures;
 
-use Faker\Factory;
-use App\Entity\Home;
-use App\Entity\User;
-use Faker\Generator;
-use App\Entity\Product;
 use App\Entity\Favorite;
+use App\Entity\Home;
 use App\Entity\HomeProduct;
-use Doctrine\Persistence\ObjectManager;
+use App\Entity\Product;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
+use Faker\Generator;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
     private Generator $faker;
 
-    public function __construct()
+    private UserPasswordHasherInterface $hasher;
+
+    public function __construct(UserPasswordHasherInterface $hasher)
     {
         $this->faker = Factory::create('fr_FR');
+        $this->hasher = $hasher;
     }
 
     public function load(ObjectManager $manager): void
@@ -55,7 +59,10 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail($this->faker->email());
             $user->setRoles([]);
-            $user->setPassword("password");
+            $user->setPassword($this->hasher->hashPassword(
+                $user,
+                'password'
+            ));
             $user->setUName($this->faker->firstName());
             $user->setUColor($this->faker->hexColor());
             $user->setUActiveNotification($this->faker->boolean());
@@ -88,8 +95,6 @@ class AppFixtures extends Fixture
 
             $manager->persist($homeproduct);
         }
-
-
 
         $manager->flush();
     }

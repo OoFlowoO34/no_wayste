@@ -1,4 +1,18 @@
 {
   "php-cs-fixer.rules": "@Symfony",
-  "php-cs-fixer.onsave": true
+  "php-cs-fixer.onsave": true,
+  "emmet.includeLanguages": {
+      "twig": "html",
+      "javascript":"javascriptreact"
+  },
+  "emmet.triggerExpansionOnTab": true,
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false
+  },
+
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.colorTheme": "Monokai Pro (Filter Ristretto)"
 }

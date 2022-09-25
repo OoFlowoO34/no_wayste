@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "bmewburn.vscode-intelephense-client",
+        "neilbrayfield.php-docblocker",
+        "mblode.twig-language-2",
+        "MehediDracula.php-namespace-resolver",
+        "esbenp.prettier-vscode",
+        "mikestead.dotenv"
+    ],
+    "unwantedRecommendations": [
+        "vscode.php-language-features"
+    ]
+}

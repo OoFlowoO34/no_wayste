@@ -43,7 +43,7 @@ class AppFixtures extends Fixture
 
         // Home
         $homes = [];
-        for ($k = 0; $k < 10; ++$k) {
+        for ($k = 0; $k < 5; ++$k) {
             $home = new Home();
             $home->setHName($this->faker->lastName());
             $home->setHKey(mt_rand(0, 99999));
@@ -55,7 +55,7 @@ class AppFixtures extends Fixture
 
         // User
         $users = [];
-        for ($l = 0; $l < 50; ++$l) {
+        for ($l = 0; $l < 20; ++$l) {
             $user = new User();
             $user->setEmail($this->faker->email());
             $user->setRoles([]);
@@ -73,7 +73,7 @@ class AppFixtures extends Fixture
 
         // Favorite
         $favorites = [];
-        for ($i = 0; $i < 100; ++$i) {
+        for ($i = 0; $i < 500; ++$i) {
             $favorite = new Favorite();
             $favorite->setFAdditionDate($this->faker->dateTimeThisMonth());
             $favorite->setFOrderNumber(mt_rand(0, 100));

@@ -155,6 +155,20 @@ class Product
         return false;
     }
 
+    public function isFavByHome(User $user): bool {
+    $favorites = $this->getFavorites();
+
+        if($favorites != null ){
+
+            foreach($favorites as $favorite){
+                if($favorite->getUser()->getHome() == $user->getHome()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     public function __toString()
     {

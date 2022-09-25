@@ -23,6 +23,10 @@ class Favorite
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
+    #[ORM\ManyToOne(inversedBy: 'favorites')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     // public function __construct()
     // {
     //     $this->f_addition_date = new \DateTimeImmutable();
@@ -65,6 +69,18 @@ class Favorite
     public function setProduct(?Product $product): self
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

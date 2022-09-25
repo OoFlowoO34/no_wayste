@@ -2,14 +2,15 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Favorite;
-use App\Entity\Home;
-use App\Entity\HomeProduct;
-use App\Entity\Product;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use App\Entity\Home;
+use App\Entity\User;
 use Faker\Generator;
+use App\Entity\Product;
+use App\Entity\Favorite;
+use App\Entity\HomeProduct;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class AppFixtures extends Fixture
 {
@@ -36,6 +37,33 @@ class AppFixtures extends Fixture
             $manager->persist($product);
         }
 
+        // Home
+        $homes = [];
+        for ($k = 0; $k < 10; ++$k) {
+            $home = new Home();
+            $home->setHName($this->faker->lastName());
+            $home->setHKey(mt_rand(0, 99999));
+            $home->setHPassword($this->faker->password());
+            $homes[] = $home;
+
+            $manager->persist($home);
+        }
+
+        // User
+        $users = [];
+        for ($l = 0; $l < 50; ++$l) {
+            $user = new User();
+            $user->setEmail($this->faker->email());
+            $user->setRoles([]);
+            $user->setPassword("password");
+            $user->setUName($this->faker->firstName());
+            $user->setUColor($this->faker->hexColor());
+            $user->setUActiveNotification($this->faker->boolean());
+            $user->setHome($homes[mt_rand(0, count($homes) - 1)]);
+            $users[] = $user;
+            $manager->persist($user);
+        }
+
         // Favorite
         $favorites = [];
         for ($i = 0; $i < 100; ++$i) {
@@ -43,21 +71,10 @@ class AppFixtures extends Fixture
             $favorite->setFAdditionDate($this->faker->dateTimeThisMonth());
             $favorite->setFOrderNumber(mt_rand(0, 100));
             $favorite->setProduct($products[mt_rand(0, count($products) - 1)]);
+            $favorite->setUser($users[mt_rand(0, count($users) - 1)]);
             $favorites[] = $favorite;
 
             $manager->persist($favorite);
-        }
-
-        // Home
-        $homes = [];
-        for ($k = 0; $k < 10; ++$k) {
-            $home = new Home();
-            $home->setHName($this->faker->name());
-            $home->setHKey(mt_rand(0, 99999));
-            $home->setHPassword($this->faker->password());
-            $homes[] = $home;
-
-            $manager->persist($home);
         }
 
         // HomeProduct
@@ -71,6 +88,8 @@ class AppFixtures extends Fixture
 
             $manager->persist($homeproduct);
         }
+
+
 
         $manager->flush();
     }

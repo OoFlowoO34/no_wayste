@@ -5,10 +5,13 @@ namespace App\Controller;
 use App\Entity\Favorite;
 use App\Form\FavoriteType;
 use App\Repository\FavoriteRepository;
+use App\Repository\HomeProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\ProductRepository;
+use App\Repository\UserRepository;
 
 #[Route('/favorite')]
 class FavoriteController extends AbstractController
@@ -21,23 +24,18 @@ class FavoriteController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_favorite_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, FavoriteRepository $favoriteRepository): Response
+    #[Route('/new', name: 'app_favorite_new', methods: ['POST'])]
+    public function new(Request $request, FavoriteRepository $favoriteRepository, ProductRepository $ProductRepository, UserRepository $userRepository): Response
     {
+        $productId = $request->get("productId");
+        $userId = $request->get("userId");
+        
         $favorite = new Favorite();
-        $form = $this->createForm(FavoriteType::class, $favorite);
-        $form->handleRequest($request);
+        $favorite->setProduct($ProductRepository->find($productId));
+        $favorite->setUser($userRepository->find($userId));
+        $favoriteRepository->add($favorite, true);
+        return $this->redirectToRoute('app_home_product_index', [], Response::HTTP_SEE_OTHER);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $favoriteRepository->add($favorite, true);
-
-            return $this->redirectToRoute('app_favorite_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('favorite/new.html.twig', [
-            'favorite' => $favorite,
-            'form' => $form,
-        ]);
     }
 
     #[Route('/{id}', name: 'app_favorite_show', methods: ['GET'])]
@@ -69,21 +67,22 @@ class FavoriteController extends AbstractController
     #[Route('/{id}', name: 'app_favorite_delete', methods: ['POST'])]
     public function delete(Request $request, Favorite $favorite, FavoriteRepository $favoriteRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$favorite->getId(), $request->request->get('_token'))) {
+    // if ($this->isCsrfTokenValid('delete'.$favorite->getId(), $request->request->get('_token'))) {
+    // }
             $favoriteRepository->remove($favorite, true);
-        }
+        
 
-        return $this->redirectToRoute('app_favorite_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home_product_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}', name: 'app_favorite_delete_2', methods: ['GET'])]
-    public function delete_2(Request $request, Favorite $favorite, FavoriteRepository $favoriteRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$favorite->getId(), $request->request->get('_token'))) {
-            $favoriteRepository->remove($favorite, true);
-        }
+    // #[Route('/{id}', name: 'app_favorite_delete', methods: ['GET'])]
+    // public function delete(Request $request, Favorite $favorite, FavoriteRepository $favoriteRepository): Response
+    // {
+       
+    //         $favoriteRepository->remove($favorite, true);
+        
 
-        return $this->redirectToRoute('app_favorite_index', [], Response::HTTP_SEE_OTHER);
-    }
+    //     return $this->redirectToRoute('app_favorite_index', [], Response::HTTP_SEE_OTHER);
+    // }
 
 }

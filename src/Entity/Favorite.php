@@ -27,10 +27,10 @@ class Favorite
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    // public function __construct()
-    // {
-    //     $this->f_addition_date = new \DateTimeImmutable();
-    // }
+    public function __construct()
+    {
+        $this->f_addition_date = new \DateTime();
+    }
 
     public function getId(): ?int
     {

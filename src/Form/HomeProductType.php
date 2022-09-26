@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Form\FavoriteType;
 use App\Entity\HomeProduct;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

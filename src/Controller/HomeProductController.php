@@ -2,25 +2,41 @@
 
 namespace App\Controller;
 
+use App\Entity\Favorite;
+use App\Form\FavoriteType;
 use App\Entity\HomeProduct;
 use App\Form\HomeProductType;
 use App\Repository\HomeProductRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/home_product')]
 class HomeProductController extends AbstractController
 {
+
     #[Route('/', name: 'app_home_product_index', methods: ['GET'])]
     public function index(HomeProductRepository $homeProductRepository): Response
     {
+        // https://symfony.com/doc/current/forms.html
+        // Create a new object Favorite
+        $favorite = new Favorite();
+
+        // Creates and returns a Form instance from the type of the form. 
+        $form = $this->createForm(FavoriteType::class, $favorite);
+
+        // Get logged user's object
         $user = (object) $this->getUser();
+
+        // Get home's object of the logged user
         $home_user = $user->getHome();
-        // $home_user = $user->home;
+
         return $this->render('home_product/index.html.twig', [
             'home_products' => $homeProductRepository->findBy(['home'=> $home_user]),
+
+            // In versions prior to Symfony 5.3, controllers used the method $this->render('...', ['form' => $form->createView()]) to render the form. The renderForm() method abstracts this logic and it also sets the 422 HTTP status code in the response automatically when the submitted form is not valid.
+            'form' => $form->createView(),
         ]);
     }
 

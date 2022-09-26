@@ -21,15 +21,28 @@
         {% for home_product in home_products %}
             <tr>
                 <td>{{ home_product.getProduct().getPName() }}</td>
-                <td>    
-                
+                <td>     
+                        
+                        {# get the favorite id of the product depending on the home of the user #}
+                        {% set FavIdByHome = home_product.getProduct().getFavIdByHome(app.user) %}
+
                         {% if home_product.getProduct().isFavByHome(app.user) %} 
-                            <a href="{{ path('app_favorite_delete', {'id': home_product.product}) }}"><i class="fa-solid fa-star"></i></a>
+                        
+                            <form method="post" action="{{ path('app_favorite_delete', {'id': FavIdByHome}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ FavIdByHome) }}">
+                                <button class="btn p-0"><i class="fa-solid fa-star"></i></button>
+                            </form>
+
                         {% else %}
-                            <a href="{{ path('app_favorite_new', {'id': home_product.product}) }}"><i class="fa-regular fa-star"></i></a>
+
+                            <form method="post" action="{{ path('app_favorite_new') }}">
+                                <input type="hidden" name="productId" value= "{{ home_product.product.id }}">
+                                <input type="hidden" name="userId" value= "{{ app.user.id }}" >
+                                <button class="btn p-0"><i class="fa-regular fa-star"></i></button>
+                            </form>
+
                         {% endif %}
                 </td>
-                {# <td>{{ home_product.hpScanDate ? home_product.hpScanDate|date('Y-m-d H:i:s') : '' }}</td> #}
                 <td>{{ home_product.hpScanDate|date('Y-m-d H:i:s')}}</td>
                 <td>{{ home_product.hpUseByDate ? home_product.hpUseByDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ home_product.hpConsumed ? 'Yes' : 'No' }}</td>

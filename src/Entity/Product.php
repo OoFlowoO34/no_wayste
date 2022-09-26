@@ -174,17 +174,24 @@ class Product
     {
         return $this->p_name;
     }
-    // public function deleteFavByUser(User $user): bool {
-    // $favorites = $this->getFavorites();
 
-    //     if($favorites != null ){
+    /**
+     * Allow to get the favorite id of the product depending on the home of the user
+     *
+     * @param User $user
+     * @return integer|null
+     */
+    public function getFavIdByHome(User $user): ?int{
+    $favorites = $this->getFavorites();
 
-    //         foreach($favorites as $favorite){
-    //             if($favorite->getUser() == $user){
-    //                 $this->removeFavorite($favorite);
-    //             }
-    //         }
-    //     }
-    //     return false;
-    // }
+        if($favorites != null ){
+
+            foreach($favorites as $favorite){
+                if($favorite->getUser()->getHome() == $user->getHome()){
+                    return $favorite->getId();
+                }
+            }
+        }
+        return false;
+    }
 }
